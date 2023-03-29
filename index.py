@@ -29,7 +29,7 @@ class Menu(QMainWindow):
         # wlayout = QVBoxLayout(self)
 
         # 选择文件或文件夹路径布局
-        layout_selectfile = QVBoxLayout()
+        layout_selectfile = QHBoxLayout()
         layout_selectfile.addWidget(self.label_choosefile)
         layout_selectfile.addWidget(self.button_choosedir)
         layout_selectfile.addWidget(self.button_chooseimage)
