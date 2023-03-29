@@ -26,7 +26,7 @@ class Menu(QMainWindow):
         self.button_chooseimage.clicked.connect(self.getfile)
 
         # 全局布局
-        wlayout = QVBoxLayout(self)
+        # wlayout = QVBoxLayout(self)
 
         # 选择文件或文件夹路径布局
         layout_selectfile = QVBoxLayout()
@@ -34,13 +34,13 @@ class Menu(QMainWindow):
         layout_selectfile.addWidget(self.button_choosedir)
         layout_selectfile.addWidget(self.button_chooseimage)
 
-        widget_selectfile = QWidget()
-        widget_selectfile.setLayout(layout_selectfile)
-
-        wlayout.addWidget(widget_selectfile)
+        # widget_selectfile = QWidget()
+        # widget_selectfile.setLayout(layout_selectfile)
+        #
+        # wlayout.addWidget(widget_selectfile)
 
         # 设置全局布局为主布局
-        self.setLayout(wlayout)
+        self.setLayout(layout_selectfile)
 
     def getfiles(self):
         self.imagedirpath = QFileDialog.getExistingDirectory(self, "选取文件夹", self.cdir)
