@@ -46,6 +46,11 @@ class Menu(QWidget):
                            "    }\n"
                            "\n"
                            ""
+                           "QWidget#centralwidget{\n"
+                           "    background:white;\n"
+                           "    border-radius:10px;\n"
+                           "}\n"
+                           "\n"
                            )
         self.imagedirpath = ''
         self.imagefilepath = ''

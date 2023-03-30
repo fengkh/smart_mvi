@@ -1,1 +1,7 @@
 *.png
+10240/
+crop_results/
+predict_results/
+stitch_results/
+yolox/dataset/
+yolox/model_data/

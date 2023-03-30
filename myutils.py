@@ -2,6 +2,10 @@ import openslide
 import os
 from PIL import Image
 
+import yolox.predict as predict_yolox
+
+Image.MAX_IMAGE_PIXELS = None
+
 
 def compress(path, w, h, save):
     print('crop path:{}'.format(path))
@@ -120,10 +124,12 @@ def predict(path, save):
                 for name in names:
                     predict_image_path = os.path.join(path, filename, name)
                     save_image_path = os.path.join(save, 'predict_results', filename, name)
-                    if not os.path.exists(save_image_path):
-                        os.makedirs(save_image_path)
+                    if not os.path.exists(os.path.join(save, 'predict_results', filename)):
+                        os.makedirs(os.path.join(save, 'predict_results', filename))
                     # predict here
-
+                    print(predict_image_path)
+                    print(save_image_path)
+                    predict_yolox.predict(predict_image_path, save_image_path, "predict")
         except Exception:
             raise IOError('路径中存在非图片文件')
     else:
