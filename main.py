@@ -164,19 +164,79 @@ class Menu(QWidget):
         self.tab2.setLayout(layout)
 
     def inittab3(self):
-        layout = QHBoxLayout()
+        layout = QVBoxLayout()
+        # label_choosefile = QLabel('请选择要处理的图片文件路径：')
+        button_choosedir = QPushButton(self)
+        button_choosedir.setText("选择文件夹")
+        button_predict = QPushButton(self)
+        button_predict.setText("开始预测")
+        button_exit = QPushButton(self)
+        button_exit.setText("退出程序")
 
-        self.tab1.setLayout(layout)
+        text_dir = QTextEdit()
+        text_dir.setText(self.imagedirpath + self.imagefilepath)
+
+        button_choosedir.clicked.connect(self.getfiles)
+        button_predict.clicked.connect(self.predict)
+        button_exit.clicked.connect(exit_button)
+
+        text = QTextEdit(
+            '功能说明:对裁剪好的小图片进行分别预测，请选择存放裁剪后的小图文件夹路径进行预测操作。')
+        text.setReadOnly(True)
+
+        layout.addWidget(text)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(button_choosedir, alignment=Qt.AlignVCenter | Qt.AlignCenter)
+        button_layout.addWidget(button_predict, alignment=Qt.AlignVCenter | Qt.AlignCenter)
+        button_layout.addWidget(button_exit, alignment=Qt.AlignVCenter | Qt.AlignCenter)
+
+        temp_ = QWidget()
+        temp_.setLayout(button_layout)
+        layout.addWidget(temp_)
+        # layout.addWidget(text_dir)
+        self.tab3.setLayout(layout)
 
     def inittab4(self):
-        layout = QHBoxLayout()
+        layout = QVBoxLayout()
+        # label_choosefile = QLabel('请选择要处理的图片文件路径：')
+        button_choosedir = QPushButton(self)
+        button_choosedir.setText("选择文件夹")
+        button_stitch = QPushButton(self)
+        button_stitch.setText("开始拼接")
+        button_exit = QPushButton(self)
+        button_exit.setText("退出程序")
 
-        self.tab1.setLayout(layout)
+        text_dir = QTextEdit()
+        text_dir.setText(self.imagedirpath + self.imagefilepath)
+
+        button_choosedir.clicked.connect(self.getfiles)
+        button_stitch.clicked.connect(self.stitch)
+        button_exit.clicked.connect(exit_button)
+
+        text = QTextEdit(
+            '功能说明:将预测好的单张图片重新拼接成完成的图片，请选择存放预测结果图片的文件夹路径。')
+        text.setReadOnly(True)
+
+        layout.addWidget(text)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(button_choosedir, alignment=Qt.AlignVCenter | Qt.AlignCenter)
+        button_layout.addWidget(button_stitch, alignment=Qt.AlignVCenter | Qt.AlignCenter)
+        button_layout.addWidget(button_exit, alignment=Qt.AlignVCenter | Qt.AlignCenter)
+
+        temp_ = QWidget()
+        temp_.setLayout(button_layout)
+        layout.addWidget(temp_)
+        # layout.addWidget(text_dir)
+        self.tab4.setLayout(layout)
 
     def inittab5(self):
         layout = QHBoxLayout()
+        text = QTextEdit(
+            '功能待定')
+        text.setReadOnly(True)
 
-        self.tab1.setLayout(layout)
+        layout.addWidget(text)
+        self.tab5.setLayout(layout)
 
     def getfiles(self):
         self.imagefilepath = ''
@@ -199,7 +259,67 @@ class Menu(QWidget):
     def compress(self):
         compress_path = self.imagedirpath or self.imagefilepath
         try:
-            myutils.compress(compress_path, 10, 10)
+            myutils.compress(compress_path, 10, 10, self.cdir)
+        except ValueError:
+            except_box = QMessageBox()
+            except_box.setText('输入的路径错误，请重试')
+            except_box.setStyleSheet("QLabel{"
+                                     "min-width: 200px;"
+                                     "min-height: 50px;"
+                                     # "align:center;"
+                                     "}")
+            except_box.setWindowTitle("提示")
+            # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+            except_box.setStandardButtons(QMessageBox.Ok)
+
+            # 显示消息框
+            except_box.show()
+
+            # 设置定时器关闭消息框并显示文本
+            timer = QTimer()
+            timer.singleShot(3000, lambda: [except_box.close(), print("\n路径错误！")])  # 3秒后关闭并显示文本
+            return
+        except IOError:
+            except_box = QMessageBox()
+            except_box.setText('请确保路径中只有待处理的病理图片')
+            except_box.setStyleSheet("QLabel{"
+                                     "min-width: 300px;"
+                                     "min-height: 50px;"
+                                     # "align:center;"
+                                     "}")
+            except_box.setWindowTitle("提示")
+            # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+            except_box.setStandardButtons(QMessageBox.Ok)
+
+            # 显示消息框
+            except_box.show()
+
+            # 设置定时器关闭消息框并显示文本
+            timer = QTimer()
+            timer.singleShot(3000, lambda: [except_box.close(), print("\n图片错误！")])  # 3秒后关闭并显示文本
+            return
+        msg_box = QMessageBox()
+        msg_box.setText('完成压缩，进入下一步')
+        msg_box.setStyleSheet("QLabel{"
+                              "min-width: 200px;"
+                              "min-height: 50px;"
+                              # "align:center;"
+                              "}")
+        msg_box.setWindowTitle("提示")
+        # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+
+        # 显示消息框
+        msg_box.show()
+
+        # 设置定时器关闭消息框并显示文本
+        timer = QTimer()
+        timer.singleShot(3000, lambda: [msg_box.close(), print("\n压缩-执行完毕！")])  # 3秒后关闭并显示文本
+
+    def crop(self):
+        crop_path = self.imagedirpath or self.imagefilepath
+        try:
+            myutils.crop(crop_path, 1024, self.cdir)
         except ValueError:
             except_box = QMessageBox()
             except_box.setText('输入的路径错误，请重试')
@@ -256,8 +376,125 @@ class Menu(QWidget):
         timer = QTimer()
         timer.singleShot(3000, lambda: [msg_box.close(), print("\n裁剪-执行完毕！")])  # 3秒后关闭并显示文本
 
-    def crop(self):
-        pass
+    def predict(self):
+        predict_path = self.imagedirpath
+        try:
+            myutils.predict(predict_path, self.cdir)
+        except ValueError:
+            except_box = QMessageBox()
+            except_box.setText('输入的路径错误，请重试')
+            except_box.setStyleSheet("QLabel{"
+                                     "min-width: 200px;"
+                                     "min-height: 50px;"
+                                     # "align:center;"
+                                     "}")
+            except_box.setWindowTitle("提示")
+            # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+            except_box.setStandardButtons(QMessageBox.Ok)
+
+            # 显示消息框
+            except_box.show()
+
+            # 设置定时器关闭消息框并显示文本
+            timer = QTimer()
+            timer.singleShot(3000, lambda: [except_box.close(), print("\n路径错误！")])  # 3秒后关闭并显示文本
+            return
+        except IOError:
+            except_box = QMessageBox()
+            except_box.setText('请确保路径中只有待处理的病理图片')
+            except_box.setStyleSheet("QLabel{"
+                                     "min-width: 300px;"
+                                     "min-height: 50px;"
+                                     # "align:center;"
+                                     "}")
+            except_box.setWindowTitle("提示")
+            # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+            except_box.setStandardButtons(QMessageBox.Ok)
+
+            # 显示消息框
+            except_box.show()
+
+            # 设置定时器关闭消息框并显示文本
+            timer = QTimer()
+            timer.singleShot(3000, lambda: [except_box.close(), print("\n图片错误！")])  # 3秒后关闭并显示文本
+            return
+        msg_box = QMessageBox()
+        msg_box.setText('完成预测，进入下一步')
+        msg_box.setStyleSheet("QLabel{"
+                              "min-width: 200px;"
+                              "min-height: 50px;"
+                              # "align:center;"
+                              "}")
+        msg_box.setWindowTitle("提示")
+        # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+
+        # 显示消息框
+        msg_box.show()
+
+        # 设置定时器关闭消息框并显示文本
+        timer = QTimer()
+        timer.singleShot(3000, lambda: [msg_box.close(), print("\n预测-执行完毕！")])  # 3秒后关闭并显示文本
+
+    def stitch(self):
+        stitch_path = self.imagedirpath
+        try:
+            myutils.stitch(stitch_path, self.cdir)
+        except ValueError:
+            except_box = QMessageBox()
+            except_box.setText('输入的路径错误，请重试')
+            except_box.setStyleSheet("QLabel{"
+                                     "min-width: 200px;"
+                                     "min-height: 50px;"
+                                     # "align:center;"
+                                     "}")
+            except_box.setWindowTitle("提示")
+            # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+            except_box.setStandardButtons(QMessageBox.Ok)
+
+            # 显示消息框
+            except_box.show()
+
+            # 设置定时器关闭消息框并显示文本
+            timer = QTimer()
+            timer.singleShot(3000, lambda: [except_box.close(), print("\n路径错误！")])  # 3秒后关闭并显示文本
+            return
+        except IOError:
+            except_box = QMessageBox()
+            except_box.setText('请确保路径中只有待处理的病理图片')
+            except_box.setStyleSheet("QLabel{"
+                                     "min-width: 300px;"
+                                     "min-height: 50px;"
+                                     # "align:center;"
+                                     "}")
+            except_box.setWindowTitle("提示")
+            # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+            except_box.setStandardButtons(QMessageBox.Ok)
+
+            # 显示消息框
+            except_box.show()
+
+            # 设置定时器关闭消息框并显示文本
+            timer = QTimer()
+            timer.singleShot(3000, lambda: [except_box.close(), print("\n图片错误！")])  # 3秒后关闭并显示文本
+            return
+        msg_box = QMessageBox()
+        msg_box.setText('完成拼接，进入下一步')
+        msg_box.setStyleSheet("QLabel{"
+                              "min-width: 200px;"
+                              "min-height: 50px;"
+                              # "align:center;"
+                              "}")
+        msg_box.setWindowTitle("提示")
+        # msg_box.setStyleSheet("QLabel{align:center;} QPushButton{margin-left:150px; margin-right:150px;}")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+
+        # 显示消息框
+        msg_box.show()
+
+        # 设置定时器关闭消息框并显示文本
+        timer = QTimer()
+        timer.singleShot(3000, lambda: [msg_box.close(), print("\n拼接-执行完毕！")])  # 3秒后关闭并显示文本
 
 
 if __name__ == '__main__':
