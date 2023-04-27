@@ -503,6 +503,7 @@ class Menu(QWidget):
             # runner_box.setStandardButtons(QMessageBox.Ok)
             runner_box.show()
             time.sleep(2)
+            # print('self.cdir {}'.format(self.cdir))
             myutils.predict(predict_path, self.cdir)
             runner_box.close()
         except ValueError:

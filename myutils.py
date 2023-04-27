@@ -127,8 +127,8 @@ def predict(path, save):
                     if not os.path.exists(os.path.join(save, 'predict_results', filename)):
                         os.makedirs(os.path.join(save, 'predict_results', filename))
                     # predict here
-                    print(predict_image_path)
-                    print(save_image_path)
+                    print('predict_image_path:{}'.format(predict_image_path))
+                    print('save_image_path:{}'.format(save_image_path))
                     predict_yolox.predict(predict_image_path, save_image_path, "predict")
         except Exception:
             raise IOError('路径中存在非图片文件')

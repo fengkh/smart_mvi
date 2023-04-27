@@ -13,6 +13,7 @@ from yolox.yolo_pred import YOLO
 
 def predict(pred_dir, save_dir, predict_mode):
     yolo = YOLO()
+    print('init yolo model succeed')
     # ----------------------------------------------------------------------------------------------------------#
     #   mode用于指定测试的模式：
     #   'predict'           表示单张图片预测，如果想对预测过程进行修改，如保存图片，截取对象等，可以先看下方详细的注释
